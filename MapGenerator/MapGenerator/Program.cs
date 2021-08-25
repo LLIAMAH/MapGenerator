@@ -18,9 +18,9 @@ namespace MapGenerator
         private static void OutputArray(int[,] array, int mapSize)
         {
             // output generated array
-            for (int i = 0; i < mapSize; i++)
+            for (var i = 0; i < mapSize; i++)
             {
-                for (int j = 0; j < mapSize; j++)
+                for (var j = 0; j < mapSize; j++)
                     Console.Write($"{array[i, j]}");
 
                 Console.WriteLine();
@@ -50,8 +50,8 @@ namespace MapGenerator
         public int[,] GetInitialTerrain()
         {
             var array = new int[this._size, this._size];
-            for (int i = 0; i < this._size; i++)
-                for (int j = 0; j < this._size; j++)
+            for (var i = 0; i < this._size; i++)
+                for (var j = 0; j < this._size; j++)
                     array[i, j] = RandomSimplify();
 
             return array;
@@ -62,9 +62,9 @@ namespace MapGenerator
             var tempArray = GetExtendedMap(array);
             var output = new int[_size, _size];
             // output generated array
-            for (int i = 0; i < this._size; i++)
+            for (var i = 0; i < this._size; i++)
             {
-                for (int j = 0; j < this._size; j++)
+                for (var j = 0; j < this._size; j++)
                 {
                     switch (array[i, j])
                     {
@@ -94,8 +94,8 @@ namespace MapGenerator
         public MergeResult[,] GetExtendedMap(int[,] array)
         {
             var output = new MergeResult[this._size, this._size];
-            for (int i = 0; i < this._size; i++)
-                for (int j = 0; j < this._size; j++)
+            for (var i = 0; i < this._size; i++)
+                for (var j = 0; j < this._size; j++)
                     output[i, j] = GetTerrainEx(array, i, j);
 
             return output;
@@ -134,19 +134,23 @@ namespace MapGenerator
     public class X9
     {
         private const int _defaultItemsCount = 8;
-        private XCell[,] _x9 = new XCell[3, 3];
+        private readonly XCell[,] _x9 = new XCell[3, 3];
 
-        protected XCell NW { get { return _x9[0, 0]; } }
-        protected XCell N { get { return _x9[1, 0]; } }
-        protected XCell NE { get { return _x9[2, 0]; } }
+        // ReSharper disable once InconsistentNaming
+        protected XCell NW => _x9[0, 0];
+        protected XCell N => _x9[1, 0];
+        // ReSharper disable once InconsistentNaming
+        protected XCell NE => _x9[2, 0];
 
-        protected XCell W { get { return _x9[0, 1]; } }
-        protected XCell C { get { return _x9[1, 1]; } }
-        protected XCell E { get { return _x9[2, 1]; } }
+        protected XCell W => _x9[0, 1];
+        protected XCell C => _x9[1, 1];
+        protected XCell E => _x9[2, 1];
 
-        protected XCell SW { get { return _x9[0, 2]; } }
-        protected XCell S { get { return _x9[1, 2]; } }
-        protected XCell SE { get { return _x9[2, 2]; } }
+        // ReSharper disable once InconsistentNaming
+        protected XCell SW => _x9[0, 2];
+        protected XCell S => _x9[1, 2];
+        // ReSharper disable once InconsistentNaming
+        protected XCell SE => _x9[2, 2];
 
         public X9(int[,] array, int maxSize, int i, int j)
         {
@@ -173,14 +177,12 @@ namespace MapGenerator
                     SumItemsNew = mr.SumItemsNew,
                 };
             }
-            else
+
+            return new MergeResult()
             {
-                return new MergeResult()
-                {
-                    Value = mr.Value,
-                    SumItemsNew = --mr.SumItemsNew
-                };
-            }
+                Value = mr.Value,
+                SumItemsNew = --mr.SumItemsNew
+            };
         }
 
         public MergeResult GetAround()
